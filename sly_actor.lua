@@ -8,6 +8,7 @@ function actordestroy(player)
 	actor[num].model = nil
 	actor_head[num]:delete()
 	actor_weapon[num]:delete()
+	actor_weapon_attach[num]:delete()
 	actor[num]:delete()
 end
 
@@ -22,6 +23,12 @@ function actorcreate(player)
 		end
 		if actor_head[num] ~= nil then
 			actor_head[num]:delete()
+		end
+		if actor_weapon[num] ~= nil then
+			actor_weapon[num]:delete()
+		end
+		if actor_weapon_attach[num] ~= nil then
+			actor_weapon_attach[num]:delete()
 		end
 		actor[num] = game:spawn("script_model", player.origin)
 		actor[num].origin = player.origin
@@ -90,7 +97,7 @@ function actormove(player)
 
 	if #getdvarargs == 2 then
 		local num = tonumber(getdvarargs[1])
-		local speed = (tonumber(getdvarargs[2]) / timescale)
+		local speed = tonumber(getdvarargs[2])
 
 		actor[num].origin = actor_node[num][1].origin
 		actor[num].angles = actor_node[num][1].angles
@@ -111,6 +118,9 @@ function actorsetweapon(player)
 		if actor_weapon[num] ~= nil then
 			actor_weapon[num]:delete()
 		end
+		if actor_weapon_attach[num] ~= nil then
+			actor_weapon_attach[num]:delete()
+		end
 		actor_weapon[num] = game:spawn("script_model", actor[num]:gettagorigin("j_gun"))
 		actor_weapon[num]:linkto(actor[num], "j_gun", vector:new(0.0, 0.0, 0.0), vector:new(0.0, 0.0, 0.0))
 		actor_weapon[num]:setmodel(getdvarargs[2])
@@ -118,6 +128,9 @@ function actorsetweapon(player)
 		-- camo selected
 		if actor_weapon[num] ~= nil then
 			actor_weapon[num]:delete()
+		end
+		if actor_weapon_attach[num] ~= nil then
+			actor_weapon_attach[num]:delete()
 		end
 		actor_weapon[num] = game:spawn("script_model", actor[num]:gettagorigin("j_gun"))
 		actor_weapon[num]:linkto(actor[num], "j_gun", vector:new(0.0, 0.0, 0.0), vector:new(0.0, 0.0, 0.0))
@@ -165,5 +178,28 @@ function actorsetnode(player)
 		end
 	else
 		player:iclientprintln("No node selected!")
+	end
+end
+
+function actorattach(player)
+	local getdvarargs = splitStr(game:getdvar("sly_actor_attach"))
+	game:setdvar("sly_actor_attach", "actor# model tag")
+
+	if #getdvarargs == 3 then
+		local num = tonumber(getdvarargs[1])
+		local weaponmodel = getdvarargs[2]
+		local tag = getdvarargs[3]
+
+		if actor_weapon_attach[num] ~= nil then
+			actor_weapon_attach[num]:delete()
+		end
+
+		actor_weapon_attach[num] = game:spawn("script_model", actor_weapon[num]:gettagorigin(tag))
+		actor_weapon_attach[num]:linkto(actor_weapon[num], tag, vector:new(0.0, 0.0, 0.0), vector:new(0.0, 0.0, 0.0))
+		actor_weapon_attach[num]:setmodel(weaponmodel)
+
+		--actor_weapon_attach[num] = game:spawn("script_model", actor_weapon[num]:gettagorigin("tag_acog_2"))
+		--actor_weapon_attach[num]:linkto(actor_weapon[num], "tag_acog_2", vector:new(0.0, 0.0, 0.0), vector:new(0.0, 0.0, 0.0))
+		--actor_weapon_attach[num]:setmodel("weapon_acog_iw6")
 	end
 end

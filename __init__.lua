@@ -1,10 +1,11 @@
+json = require("libs.json")
 include("sly_main")
 include("sly_actor")
 include("sly_player")
 include("sly_camera")
+include("sly_camera_thirdperson")
 include("sly_utils")
 include("sly_forge")
-include("sly_menu")
 include("sly_precache")
 
 print("==============================================")
@@ -26,11 +27,20 @@ camera_node_alldist = 0
 camera_node_partdist = {}
 camera_node_angledist = {}
 
+camera_base = game:spawn("script_model", vector:new(0.0, 0.0, 0.0))
+camera_base:setmodel("test_sphere_silver")
+camera_base:enablelinkto()
+
+camera_base_offset = game:spawn("script_model", vector:new(0.0, 0.0, 0.0))
+camera_base_offset:setmodel("test_sphere_silver")
+camera_base:enablelinkto()
+
 actor = {}
 actor_head = {}
 actor_node = {}
 actor_node_icon = {}
 actor_weapon = {}
+actor_weapon_attach = {}
 
 forge_num = 0
 forge_model = {}
@@ -40,7 +50,7 @@ player_health = 50
 player_spawn = {}
 
 timescale = 1
-dvarlistener_interval = 500
+dvarlistener_interval = 100
 
 precache_weapons()
 precache_playermodels()
