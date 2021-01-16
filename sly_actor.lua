@@ -104,6 +104,32 @@ function actormove(player)
 
 		actor[num]:moveto(actor_node[num][2].origin, speed, 0, 0)
 		actor[num]:rotateto(actor_node[num][2].angles, speed, 0, 0)
+	elseif #getdvarargs == 4 then
+		local num = tonumber(getdvarargs[1])
+		local speed = tonumber(getdvarargs[2])
+		local accel = tonumber(getdvarargs[3])
+		local deccel = tonumber(getdvarargs[4])
+
+		actor[num].origin = actor_node[num][1].origin
+		actor[num].angles = actor_node[num][1].angles
+
+		actor[num]:moveto(actor_node[num][2].origin, speed, accel, deccel)
+		actor[num]:rotateto(actor_node[num][2].angles, speed, accel, deccel)
+	end
+end
+
+function actorfx(player)
+	-- Plays fx on the actor's tag
+	local getdvarargs = splitStr(game:getdvar("sly_actor_fx"))
+	game:setdvar("sly_actor_fx", "actor# fx tag")
+
+	local num = tonumber(getdvarargs[1])
+	if #getdvarargs == 2 then
+		local fx = game:spawnfx(forge_fx[getdvarargs[2]], actor[num]:gettagorigin("tag_origin"))
+		game:triggerfx(fx)
+	elseif #getdvarargs == 3 then
+		local fx = game:spawnfx(forge_fx[getdvarargs[2]], actor[num]:gettagorigin(getdvarargs[3]))
+		game:triggerfx(fx)
 	end
 end
 

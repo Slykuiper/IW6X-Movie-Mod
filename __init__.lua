@@ -3,7 +3,6 @@ include("sly_main")
 include("sly_actor")
 include("sly_player")
 include("sly_camera")
-include("sly_camera_thirdperson")
 include("sly_utils")
 include("sly_forge")
 include("sly_precache")
@@ -26,14 +25,6 @@ camera_node_last = 0
 camera_node_alldist = 0
 camera_node_partdist = {}
 camera_node_angledist = {}
-
-camera_base = game:spawn("script_model", vector:new(0.0, 0.0, 0.0))
-camera_base:setmodel("test_sphere_silver")
-camera_base:enablelinkto()
-
-camera_base_offset = game:spawn("script_model", vector:new(0.0, 0.0, 0.0))
-camera_base_offset:setmodel("test_sphere_silver")
-camera_base:enablelinkto()
 
 actor = {}
 actor_head = {}

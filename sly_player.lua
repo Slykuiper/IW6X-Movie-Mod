@@ -33,6 +33,7 @@ function playerclone(player)
 			local sWeapon = nil -- weapon used
 			local sFX = nil -- effect to be played on death
 			local sWaitTime = nil -- time to wait before showing
+			local sPos = vector:new(0,0,0) -- hitlocation
 
 			if getdvarargs[2] == "unknown" then
 				sMeansOfDeath = "MOD_UNKNOWN"
@@ -84,6 +85,7 @@ function playerclone(player)
 				sWeapon = player:getcurrentweapon()
 				--sFX = level._effect["blood1"]
 				sWaitTime = 2000
+				sPos = vector:new(30,0.0,0.0)
 			elseif getdvarargs[2] == "impact" then
 				--nice
 				sMeansOfDeath = "MOD_IMPACT"
@@ -125,7 +127,7 @@ function playerclone(player)
 			for i, player in ipairs(players) do
 				if player.name == getdvarargs[1] then
 					--playFX(sFX, player getTagOrigin( "j_spine4" ));
-					deathanimduration = player:playerforcedeathanim( player, sMeansOfDeath, sWeapon, "head", vector:new(0.0, 0.0, 0.0))
+					deathanimduration = player:playerforcedeathanim( player, sMeansOfDeath, sWeapon, "head", sPos)
 					player.body = player:cloneplayer(deathanimduration)
 					player:hide()
 				

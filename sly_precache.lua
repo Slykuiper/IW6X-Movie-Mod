@@ -14,7 +14,6 @@ function precache_weapons()
 	game:precachemodel("weapon_k7")
 	game:precachemodel("weapon_kac_chainsaw")
 	game:precachemodel("weapon_knife_iw6")
-	game:precachemodel("weapon_kriss_v")
 	game:precachemodel("weapon_l115a3")
 	game:precachemodel("weapon_lsat_iw6")
 	game:precachemodel("weapon_m27")
@@ -33,14 +32,16 @@ function precache_weapons()
 	game:precachemodel("weapon_usr")
 	game:precachemodel("weapon_vepr")
 	game:precachemodel("weapon_riot_gold")
-	]]--
-	game:precachemodel("weapon_magnum_iw6")
+	game:precachemodel("weapon_dragunov_svu")
 	game:precachemodel("weapon_p226")
 	game:precachemodel("weapon_l115a3")
 	game:precachemodel("weapon_l115a3_camo")
 	game:precachemodel("weapon_l115a3_gold")
 	game:precachemodel("weapon_scavenger_grenadebag")
 	game:precachemodel("weapon_acog_iw6")
+	game:precachemodel("weapon_kriss_v")
+	]]--
+	game:precachemodel("weapon_c4_iw6")
 end
 
 function precache_playermodels()
@@ -56,15 +57,14 @@ function precache_playermodels()
 	head_mp_spectrum_aa
 	head_mp_head_c_helmet_p_alt
 	]]--
-
-	game:precachemodel("head_mp_elias_a")
-
-	game:precachemodel("mp_body_mp_elias_a_elite")
-	game:precachemodel("mp_body_mp_elias_a_urban")
+	game:precachemodel("head_mp_merrick_a")
+	game:precachemodel("mp_body_mp_merrick_a_elite")
+	game:precachemodel("mp_body_mp_merrick_a_urban")
 end
 
 function precache_playeranimations()
 	-- death animations
+
 	game:precachempanim("pb_stand_death_legs")
 	game:precachempanim("pb_stand_death_lowerback")
 	game:precachempanim("pb_stand_death_head_collapse")
@@ -86,6 +86,16 @@ function precache_playeranimations()
 	game:precachempanim("pb_stand_death_shoulderback") -- nice
 	game:precachempanim("pb_death_run_forward_crumple")
 	game:precachempanim("pb_death_run_onfront")
+	game:precachempanim("pb_explosion_death_F1")
+	--[[
+	game:precachempanim("pb_crouch_death_headshot_front")
+	game:precachempanim("pb_crouch_death_clutchchest")
+	game:precachempanim("pb_crouch_death_flip")
+	game:precachempanim("pb_crouch_death_fetal")
+	game:precachempanim("pb_crouch_death_falltohands")
+	game:precachempanim("pb_crouchrun_death_drop")
+	game:precachempanim("pb_crouchrun_death_crumple")
+	--]]
 	-- idle animations
 	game:precachempanim("mp_stand_idle")
 	-- sprint animations
@@ -95,7 +105,10 @@ function precache_playeranimations()
 	game:precachempanim("pb_sprint_assault")
 	game:precachempanim("pb_sprint_sniper")
 	game:precachempanim("pb_sprint_shotgun")
+	game:precachempanim("pb_stand_shoot_walk_forward")
+	game:precachempanim("pb_combatrun_forward_loop_sniper")
 	-- shoot/aim
+	--[[
 	game:precachempanim("pb_stand_ads")
 	game:precachempanim("pt_stand_shoot")
 	game:precachempanim("pt_rifle_fire")
@@ -111,6 +124,7 @@ function precache_playeranimations()
 	game:precachempanim("mp_stand_aim_7")
 	game:precachempanim("mp_stand_aim_8")
 	game:precachempanim("mp_stand_aim_9")
+	]]--
 end
 
 function precache_fx()
@@ -118,6 +132,8 @@ function precache_fx()
 	forge_fx["cash"] = game:loadfx("fx/props/cash_player_drop")
 	forge_fx["teleport"] = game:loadfx("vfx/gameplay/mp/core/vfx_teleport_player")
 	forge_fx["3dping"] = game:loadfx("vfx/gameplay/mp/killstreaks/vfx_3d_world_ping")
+	forge_fx["betty"] = game:loadfx("fx/explosions/bouncing_betty_explosion")
+	forge_fx["c4blink"] = game:loadfx("fx/misc/light_c4_blink")
 end
 
 function precache_materials()

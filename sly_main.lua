@@ -151,7 +151,7 @@ function setdvars(player)
 	game:setdvar("sly_actor_clone", "actor# player" )
 	game:setdvar("sly_actor_create", "actor#" )
 	game:setdvar("sly_actor_destroy", "actor#" )
-	game:setdvar("sly_actor_fx", "actor# fx" )
+	game:setdvar("sly_actor_fx", "actor# fx tag" )
 	game:setdvar("sly_actor_model", "actor# body head" )
 	game:setdvar("sly_actor_move", "actor# #" )
 	game:setdvar("sly_actor_node", "actor# #" )
@@ -174,6 +174,7 @@ function setdvars(player)
 	game:setdvar("sly_player_model", "player model")
 	game:setdvar("sly_player_health", "health")
 	game:setdvar("sly_timescale", "timescale")
+	game:setdvar("sly_test", "50 0 55")
 end
 
 function dvarlistener(player)
@@ -192,8 +193,8 @@ function dvarlistener(player)
 			actorcreate(player)
 		elseif game:getdvar("sly_actor_destroy") ~= "actor#" then
 			actordestroy(player)
-		elseif game:getdvar("sly_actor_fx") ~= "actor# fx" then
-			-- 
+		elseif game:getdvar("sly_actor_fx") ~= "actor# fx tag" then
+			actorfx(player)
 		elseif game:getdvar("sly_actor_model") ~= "actor# body head" then
 			actorsetmodel(player)
 		elseif game:getdvar("sly_actor_move") ~= "actor# #" then
@@ -208,10 +209,6 @@ function dvarlistener(player)
 			setcameranode(player)
 		elseif game:getdvar("sly_cam_rotate") ~= "#" then
 			setcamerarotation(player)
-		elseif game:getdvar("sly_3cam_link") ~= "player, tag" then
-			setcamera3rdlink(player)
-		elseif game:getdvar("sly_3cam_adjust") ~= "movey/movez/rotate" then
-			setcamera3rdadjust(player)
 		elseif game:getdvar("sly_forge_fx") ~= "fx" then
 			spawnforgeeffect(player)
 		elseif game:getdvar("sly_forge_model") ~= "model" then
@@ -268,6 +265,8 @@ function callfunction(player)
 		end  
 	elseif getdvarargs[1] == "unlink" then
 		unlinkplayer(player)
+	elseif getdvarargs[1] == "notify" then
+		player:notify(getdvarargs[2])
 	elseif getdvarargs[1] == "give" then
 		player:takeweapon(player:getcurrentweapon())
 		player:giveweapon(getdvarargs[2], tonumber(getdvarargs[3]), true)
@@ -287,26 +286,26 @@ function callfunction(player)
 		testhud:setwaypoint(true)
 	elseif getdvarargs[1] == "vision" then
 		player:visionsetnakedforplayer(getdvarargs[2])
-	elseif getdvarargs[1] == "midpoint" then
-		local alldist = vector:new(0,0,0)
-		local newdist = vector:new(0,0,0)
-		for i, node in ipairs(camera_node) do
-			alldist.x = camera_node[i].origin.x + alldist.x
-			alldist.y = camera_node[i].origin.y + alldist.y
-			alldist.z = camera_node[i].origin.z + alldist.z
-		end
-		newdist.x = alldist.x / #camera_node
-		newdist.y = alldist.y / #camera_node
-		newdist.z = alldist.z / #camera_node
+	elseif getdvarargs[1] == "angle" then
+		local ang = player:getangles()
+		print("My current angle: " .. ang.y)
 
-		if testmodel ~= nil then
-			testmodel:delete()
-		end
+		local newang = vector:new(ang.x, (ang.y + 360), ang.z)
+		player:setangles(newang)
+		local ang2 = player:getangles()
+		print("My current angle2: " .. ang2.y)
+	elseif getdvarargs[1] == "c4" then
+		local forward = player:gettagorigin("j_head")
+		local endpos = vector_scal(game:anglestoforward(player:getangles()), 60)
+		local endpos2 = vector:new(endpos.x + forward.x, endpos.y + forward.y, endpos.z + forward.z)
 
-		testmodel = game:spawn("script_model", newdist)
-		testmodel.origin = newdist
-		testmodel:setmodel("tag_origin")
-		player.origin = newdist
+		if camera_c4 ~= nil then
+			camera_c4.origin = endpos2
+		else
+			camera_c4 = game:spawn("script_model", endpos2)
+			camera_c4:setmodel("weapon_c4_iw6")
+		end
+		camera_c4:linkto(player, "j_head", vector:new(0.0, 0.0, 0.0), vector:new(0.0, 0.0, 0.0))
+		player:onnotifyonce("hidec4", function() camera_c4:hide() end)
 	end
 end
-

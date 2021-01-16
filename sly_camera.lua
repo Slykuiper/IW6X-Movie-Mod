@@ -6,62 +6,84 @@ function setcameramode(player)
 	cameramode = getdvarargs[1]
 	cameraspeed = tonumber(getdvarargs[2])
 
-	if #getdvarargs == 2 then
-		if cameramode == "linear" and camera_node[2] ~= nil then
-			player:iclientprintln("Camera Mode set to ^:", cameramode, " ^7Speed: ^:", cameraspeed)
-			initcameraflightlinear(player, cameraspeed)
-		elseif cameramode == "bezier" and camera_node[2] ~= nil then
-			player:iclientprintln("Camera Mode set to ^:", cameramode, " ^7Speed: ^:", cameraspeed)
-			initcameraflightbezier(player, cameraspeed)
-		elseif cameramode == "path" and camera_node[2] ~= nil then
-			showbezierpath(player, getdvarargs[2])
-		elseif cameramode == "save" then
-			player:iclientprintln(getdvarargs[2] .. " path ^:saved!")
+	if cameramode == "linear" and camera_node[2] ~= nil then
+		player:iclientprintln("Camera Mode set to ^:", cameramode, " ^7Speed: ^:", cameraspeed)
+		initcameraflightlinear(player, cameraspeed)
+	elseif cameramode == "bezier" and camera_node[2] ~= nil then
+		player:iclientprintln("Camera Mode set to ^:", cameramode, " ^7Speed: ^:", cameraspeed)
+		initcameraflightbezier(player, cameraspeed)
+	elseif cameramode == "path" and camera_node[2] ~= nil then
+		showbezierpath(player, getdvarargs[2])
+	elseif cameramode == "save" then
+		player:iclientprintln(getdvarargs[2] .. " path ^:saved!")
 		
-			local alldist = vector:new(0,0,0)
-			local newdist = vector:new(0,0,0)
-			for i, node in ipairs(camera_node) do
-				alldist.x = node.origin.x + alldist.x
-				alldist.y = node.origin.y + alldist.y
-				alldist.z = node.origin.z + alldist.z
-			end
-			newdist.x = alldist.x / #camera_node
-			newdist.y = alldist.y / #camera_node
-			newdist.z = alldist.z / #camera_node
+		local alldist = vector:new(0,0,0)
+		local newdist = vector:new(0,0,0)
+		for i, node in ipairs(camera_node) do
+			alldist.x = node.origin.x + alldist.x
+			alldist.y = node.origin.y + alldist.y
+			alldist.z = node.origin.z + alldist.z
+		end
+		newdist.x = alldist.x / #camera_node
+		newdist.y = alldist.y / #camera_node
+		newdist.z = alldist.z / #camera_node
 
+		cameratable = {}
+		for i, node in ipairs(camera_node) do
+			local newnodeoriginx = node.origin.x - newdist.x
+			local newnodeoriginy = node.origin.y - newdist.y
+			local newnodeoriginz = node.origin.z - newdist.z
+
+			table.insert(cameratable, {
+				node = i,
+				origin = { x = round(newnodeoriginx, 1), y = round(newnodeoriginy, 1), z = round(newnodeoriginz, 1) },
+				angles = { x = round(node.angles.x, 1), y = round(node.angles.y, 1), z = round(node.angles.z, 1) }
+			})
+		end
+		local jsonstr = json.encode(cameratable)
+		local f = io.open(("iw6x\\scripts\\slymvm\\campaths\\%s.json"):format(getdvarargs[2]), "w")
+		f:write(jsonstr)
+		f:flush()
+		f:close()
+	elseif cameramode == "load" then
+		local forward = player:gettagorigin("j_head")
+		local endpos = vector_scal(game:anglestoforward(player:getangles()), 200)
+		local org = vector:new(endpos.x + forward.x, endpos.y + forward.y, endpos.z + forward.z)
+		local fx = game:spawnfx(forge_fx["cash"], org)
+		game:triggerfx(fx)
+		--local org = player.origin
+		local ang = player:getangles()
+		local camerapath = ("iw6x\\scripts\\slymvm\\campaths\\%s.json"):format(getdvarargs[2])
+		local f = io.open(camerapath, "r")
+		if f == nil then
 			cameratable = {}
-			for i, node in ipairs(camera_node) do
-				local newnodeoriginx = node.origin.x - newdist.x
-				local newnodeoriginy = node.origin.y - newdist.y
-				local newnodeoriginz = node.origin.z - newdist.z
-
-				table.insert(cameratable, {
-					node = i,
-					origin = { x = round(newnodeoriginx, 1), y = round(newnodeoriginy, 1), z = round(newnodeoriginz, 1) },
-					angles = { x = round(node.angles.x, 1), y = round(node.angles.y, 1), z = round(node.angles.z, 1) }
-				})
+			return
+		end
+		local jsonstr = f:read("*a")
+		cameratable = json.decode(jsonstr)
+		if #getdvarargs == 3 then
+			local radian = getdvarargs[3] * (math.pi / 180)
+			for _, cameranode in ipairs(cameratable) do
+				local neworigin = vector:new(0,0,0)
+				neworigin.x = (cameranode.origin.x * math.cos(radian)) + (cameranode.origin.y * math.sin(radian))
+				neworigin.y = ((cameranode.origin.x * -1) * math.sin(radian)) + (cameranode.origin.y * math.cos(radian))
+				neworigin.z = cameranode.origin.z
+				setcameranodedirect(cameranode.node, vector:new(neworigin.x + org.x, neworigin.y + org.y, neworigin.z + org.z), vector:new(cameranode.angles.x, cameranode.angles.y - getdvarargs[3], cameranode.angles.z))
+				print("Node: " .. cameranode.node)
+				print("Origin: (" .. neworigin.x + org.x .. ", " .. neworigin.y + org.y .. ", " .. neworigin.z + org.z .. ")")
+				print("Angles: (" .. cameranode.angles.x .. ", " .. cameranode.angles.y - getdvarargs[3] .. ", " .. cameranode.angles.z .. ")")
 			end
-			local jsonstr = json.encode(cameratable)
-			local f = io.open(("iw6x\\scripts\\slymvm\\campaths\\%s.json"):format(getdvarargs[2]), "w")
-			f:write(jsonstr)
-			f:flush()
-			f:close()
-		elseif cameramode == "load" then
-			local org = player.origin
-			local camerapath = ("iw6x\\scripts\\slymvm\\campaths\\%s.json"):format(getdvarargs[2])
-			local f = io.open(camerapath, "r")
-			if f == nil then
-				cameratable = {}
-				return
-			end
-			local jsonstr = f:read("*a")
-			cameratable = json.decode(jsonstr)
+			player:iclientprintln(getdvarargs[2] .. " path ^:loaded! ^7Angle: " .. getdvarargs[3] )
+		else
 			for _, cameranode in ipairs(cameratable) do
 				setcameranodedirect(cameranode.node, vector:new(cameranode.origin.x + org.x, cameranode.origin.y + org.y, cameranode.origin.z + org.z), vector:new(cameranode.angles.x, cameranode.angles.y, cameranode.angles.z))
+				print("Node: " .. cameranode.node)
+				print("Origin: (" .. cameranode.origin.x + org.x .. ", " .. cameranode.origin.y + org.y .. ", " .. cameranode.origin.z + org.z .. ")")
+				print("Angles: (" .. cameranode.angles.x .. ", " .. cameranode.angles.y .. ", " .. cameranode.angles.z .. ")")
 			end
-			io.close(f)
 			player:iclientprintln(getdvarargs[2] .. " path ^:loaded!")
 		end
+		io.close(f)
 	elseif cameramode == "clear" then
 		for i, icon in ipairs(camera_node_icon) do
 			icon:destroy()
@@ -79,39 +101,46 @@ end
 
 function setcameranode(player)
 	-- Creates a camera node, max 10 nodes
-	local nodenum = tonumber(game:getdvar("sly_cam_node"))
+	local getdvarargs = splitStr(game:getdvar("sly_cam_node"))
+	local nodenum = tonumber(getdvarargs[1])
 	local headpos = player:gettagorigin("j_head")
 	game:setdvar("sly_cam_node", "#")
 
-	if nodenum >= 1 and nodenum <= 10 then
-		if camera_node[nodenum] ~= nil then
-			camera_node_icon[nodenum]:destroy()
-			camera_node_model[nodenum]:delete()
-			camera_node[nodenum]:delete()
-		end
-		player:iclientprintln("Camera Node: ^:" .. nodenum)
-		camera_node_last = nodenum
-		-- create camera node
-		camera_node[nodenum] = game:spawn("script_model", player.origin)
-		camera_node[nodenum].origin = player.origin
-		camera_node[nodenum].angles = player:getangles()
-		camera_node[nodenum]:setmodel("tag_origin")
-		-- create camera node icon
-		camera_node_icon[nodenum] = game:newhudelem()
-		camera_node_icon[nodenum].x = headpos.x
-		camera_node_icon[nodenum].y = headpos.y
-		camera_node_icon[nodenum].z = headpos.z
-		camera_node_icon[nodenum]:setmaterial(getwaypointicon(nodenum), 15, 15)
-		camera_node_icon[nodenum]:setwaypoint(true)
-		-- create camera node model
-		camera_node_model[nodenum] = game:spawn("script_model", headpos)
-		camera_node_model[nodenum]:setmodel("vehicle_drone_backup_buddy_gun")
-		camera_node_model[nodenum].angles = camera_node[nodenum].angles
+	if #getdvarargs == 1 then
+		if nodenum >= 1 and nodenum <= 10 then
+			if camera_node[nodenum] ~= nil then
+				camera_node_icon[nodenum]:destroy()
+				camera_node_model[nodenum]:delete()
+				camera_node[nodenum]:delete()
+			end
+			player:iclientprintln("Camera Node: ^:" .. nodenum)
+			camera_node_last = nodenum
+			-- create camera node
+			camera_node[nodenum] = game:spawn("script_model", player.origin)
+			camera_node[nodenum].origin = player.origin
+			camera_node[nodenum].angles = player:getangles()
+			camera_node[nodenum]:setmodel("tag_origin")
+			-- create camera node icon
+			camera_node_icon[nodenum] = game:newhudelem()
+			camera_node_icon[nodenum].x = headpos.x
+			camera_node_icon[nodenum].y = headpos.y
+			camera_node_icon[nodenum].z = headpos.z
+			camera_node_icon[nodenum]:setmaterial(getwaypointicon(nodenum), 15, 15)
+			camera_node_icon[nodenum]:setwaypoint(true)
+			-- create camera node model
+			camera_node_model[nodenum] = game:spawn("script_model", headpos)
+			camera_node_model[nodenum]:setmodel("vehicle_drone_backup_buddy_gun")
+			camera_node_model[nodenum].angles = camera_node[nodenum].angles
 
-		local fx = game:spawnfx(forge_fx["3dping"], headpos)
-		game:triggerfx(fx)
-	elseif nodenum > 10 then
-		player:iclientprintln("You can only set 10 nodes.")
+			local fx = game:spawnfx(forge_fx["3dping"], headpos)
+			game:triggerfx(fx)
+		elseif nodenum > 10 then
+			player:iclientprintln("You can only set 10 nodes.")
+		end
+	elseif #getdvarargs == 7 then
+		local origin = vector:new(tonumber(getdvarargs[2]), tonumber(getdvarargs[3]), tonumber(getdvarargs[4]))
+		local angles = vector:new(tonumber(getdvarargs[5]), tonumber(getdvarargs[6]), tonumber(getdvarargs[7]))
+		setcameranodedirect(nodenum, origin, angles)
 	end
 end
 
@@ -120,24 +149,20 @@ function setcamerarotation(player)
 	local getdvarargs = splitStr(game:getdvar("sly_cam_rotate"))
 	game:setdvar("sly_cam_rotate", "#")
 
-	if #getdvarargs == 1 then
-		-- rotate z axis
-		local playerangles = player:getangles()
-		print("Before Angles: (" .. playerangles.x .. ", " ..  playerangles.y .. ", " .. playerangles.z .. ")" )
-		playerangles.z = tonumber(getdvarargs[1])
-		player:setangles(playerangles)
-		local playerangles2 = player:getangles()
-		print("After Angles: (" .. playerangles2.x .. ", " ..  playerangles2.y .. ", " .. playerangles2.z .. ")" )
-	elseif #getdvarargs == 3 then
-		player:setangles(vector:new(tonumber(getdvarargs[1]), tonumber(getdvarargs[2]), tonumber(getdvarargs[3])))
-	end
+	-- rotate z axis
+	local playerangles = player:getangles()
+	print("Before Angles: (" .. playerangles.x .. ", " ..  playerangles.y .. ", " .. playerangles.z .. ")" )
+	playerangles.z = tonumber(getdvarargs[1])
+	player:setangles(playerangles)
+	local playerangles2 = player:getangles()
+	print("After Angles: (" .. playerangles2.x .. ", " ..  playerangles2.y .. ", " .. playerangles2.z .. ")" )
 end
 
 function initcameraflightlinear(player, speed)
 	-- Initialize Linear Camera Flight
 	revealnodes(false)
 
-	speed = speed / timescale
+	local speed = speed / timescale
 	local speedms = math.floor(speed / 0.001)
 
 	savedorigin2 = player.origin
@@ -188,6 +213,13 @@ function initcameraflightbezier(player, speed)
 	player:setorigin(camera_node[1].origin)
 	player:setangles(camera_node[1].angles)
 	player:playerlinkto(camera_null, "tag_origin", 1, 360, 360, 360, 360, false )
+
+	if camera_c4 == nil then
+		camera_c4 = game:spawn("script_model", endpos2)
+		camera_c4:setmodel("weapon_c4_iw6")
+	end
+	local camerapos = splitStr(game:getdvar("sly_test"))
+	camera_c4:linkto(camera_null, "tag_origin", vector:new(tonumber(camerapos[1]), tonumber(camerapos[2]), tonumber(camerapos[3])), vector:new(0.0, 0.0, 0.0))
 	player:freezecontrols(true)
 
 	-- calculate total path distance
@@ -208,8 +240,11 @@ function bezier_calc(player)
 			x = camera_node[k].angles.y
 			y = camera_node[k+1].angles.y
 			if (y - x >= 180) then
+				print("Cam path spiral detected, suggest adjusting node y angle")
+				--print("Node " .. k+1 .. " minus Node " .. k .. " greater than 180")
 				camera_node[k].angles.y = camera_node[k].angles.y + 360
 			elseif (y - x <= -180) then
+				print("Cam path spiral detected, suggest adjusting node y angle")
 				camera_node[k+1].angles.y = camera_node[k+1].angles.y + 360
 			end
 			camera_node_partdist[k] = game:distance(camera_node[k].origin, camera_node[k+1].origin )
@@ -232,7 +267,6 @@ function bezier_move(player, speed)
 	--print("loopcalc2: ", loopcalc2)
 	local vect1origin = vector:new(0.0, 0.0, 0.0)
 	local vect1angles = vector:new(0.0, 0.0, 0.0)
-
 	local vect2origin = vector:new(0.0, 0.0, 0.0)
 	local vect2angles = vector:new(0.0, 0.0, 0.0)
 
@@ -243,8 +277,8 @@ function bezier_move(player, speed)
 			unlinkplayer(player)
 			bezier_move_timer:clear()
 		elseif val < loopcalc2 then
-			print("val: ", val)
-			print("loopcalc2: ", loopcalc2)
+			--print("val: ", val)
+			--print("loopcalc2: ", loopcalc2)
 			t = (val*mul)/loopcalc1
 			vect1origin = vector:new(0.0, 0.0, 0.0)
 			vect1angles = vector:new(0.0, 0.0, 0.0)
@@ -260,8 +294,10 @@ function bezier_move(player, speed)
 
 			vect2origin = vector:new(vect1origin.x, vect1origin.y, vect1origin.z)
 			vect2angles = vector:new(vect1angles.x, vect1angles.y, vect1angles.z)
+			vect3angles = vector:new(vect1angles.x*2, vect1angles.y*2, vect1angles.z*2)
 			camera_null:moveto(vect2origin, 0.1, 0, 0)
 			camera_null:rotateto(vect2angles, 0.1, 0, 0)
+			camera_c4:rotateto(vector:new(t*5, t*10, t*5), 0.1, 0, 0)
 			val = val + 1
 		end
 	end
