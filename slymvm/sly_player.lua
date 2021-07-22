@@ -73,11 +73,20 @@ function playerkill(player)
 	local getdvarargs = tostring(game:getdvar("sly_player_kill"))
 	game:setdvar("sly_player_kill", "player")
 	
-	for i, player in ipairs(players) do
-		if player.name == getdvarargs then
-			player:suicide()
+	if getdvarargs == "all" then
+		for i, player in ipairs(players) do
+			if player:getentitynumber() ~= 0 then
+				player:suicide()
+			end
 		end
-	end 
+		player:iprintln("^7All players ^:killed")
+	else
+		for i, player in ipairs(players) do
+			if player.name == getdvarargs then
+				player:suicide()
+			end
+		end
+	end
 end
 
 function playermove(player)
@@ -112,18 +121,6 @@ function playermove(player)
 			end
 		end
 	end
-end
-
-function playermodel(player)
-	-- Set a player's model
-	local getdvarargs = splitStr(game:getdvar("sly_player_model"))
-	game:setdvar("sly_player_model", "player model")
-	
-	for i, player in ipairs(players) do
-		if player.name == getdvarargs[1] then
-			player:setmodel(getdvarargs[2])
-		end
-	end 
 end
 
 function playeradd(player)

@@ -161,11 +161,7 @@ function setcamerarotation(player)
 
 	-- rotate z axis
 	local playerangles = player.angles
-	print("Before Angles: (" .. playerangles.x .. ", " ..  playerangles.y .. ", " .. playerangles.z .. ")" )
-	playerangles.z = tonumber(getdvarargs[1])
-	player.angles = playerangles
-	local playerangles2 = player.angles
-	print("After Angles: (" .. playerangles2.x .. ", " ..  playerangles2.y .. ", " .. playerangles2.z .. ")" )
+	player:setplayerangles(vector:new( playerangles.x,  playerangles.y, tonumber(getdvarargs[1])))
 end
 
 function initcameraflightlinear(player, speed)

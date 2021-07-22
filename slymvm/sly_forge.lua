@@ -3,17 +3,18 @@ function spawnforgeeffect(player)
 	local getdvarargs = splitStr(game:getdvar("sly_forge_fx"))
 	game:setdvar("sly_forge_fx", "fx")
 
-	if #getdvarargs == 2 then
+	if #getdvarargs == 1 then
 		local forward = player:gettagorigin("j_head")
 		local endpos = vector_scal(game:anglestoforward(player.angles), 100)
 		local endpos2 = vector:new(endpos.x + forward.x, endpos.y + forward.y, endpos.z + forward.z)
 		local fx = game:spawnfx(forge_fx[getdvarargs[1]], endpos2)
 		game:triggerfx(fx)
-	elseif #getdvarargs == 3 then
+		player:iprintln("^7Effect ^:", getdvarargs[1], "^7 spawned.")
+	elseif #getdvarargs == 2 then
 		local fx = game:spawnfx(forge_fx[getdvarargs[1]], savedorigin)
 		game:triggerfx(fx)
+		player:iprintln("^7Effect ^:", getdvarargs[1], "^7 spawned.")
 	end
-	player:iprintln("^7Effect ^:", getdvarargs[1], "^7 spawned.")
 end
 
 function spawnforgemodel(player)

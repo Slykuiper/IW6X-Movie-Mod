@@ -8,6 +8,10 @@ function player_connected(player)
 			dvarlistener(player)
 		end
 	end
+	game:setdvar("cg_fov", 90)
+	game:setdvar("cg_fovscale", 1)
+	game:setdvar("cg_draw2d", 1)
+	game:setdvar("cg_drawgun", 1)
     player:onnotify("spawned_player", function() player_spawned(player) end)
 	player:onnotifyonce("disconnect", function ()
         for i, p in ipairs(players) do
@@ -64,7 +68,6 @@ function setdvars(player)
 	game:setdvarifuninitialized("sly_player_weapon", "Give a player a weapon.")
 	game:setdvarifuninitialized("sly_player_kick", "Kick a player.")
 	game:setdvarifuninitialized("sly_player_move", "Move a player to your location.")
-	game:setdvarifuninitialized("sly_player_model", "Change a player's model.")
 	game:setdvarifuninitialized("sly_player_health", "Change player's health.")
 	game:setdvarifuninitialized("sly_player_freeze", "Freeze a player.")
 	game:setdvarifuninitialized("sly_player_unfreeze", "Unfreeze a player.")
@@ -82,7 +85,7 @@ function setdvars(player)
 	game:setdvar("sly_actor_model", "actor# body head" )
 	game:setdvar("sly_actor_move", "actor# #" )
 	game:setdvar("sly_actor_node", "actor# #" )
-	game:setdvar("sly_actor_weapon", "actor# gun camo" )
+	game:setdvar("sly_actor_weapon", "actor# gun" )
 	game:setdvar("sly_cam_mode", "linear/bezier/clear/save/load/path, speed" )
 	game:setdvar("sly_cam_node", "#" )
 	game:setdvar("sly_cam_rotate", "#" )
@@ -95,7 +98,6 @@ function setdvars(player)
 	game:setdvar("sly_player_weapon", "player gun")
 	game:setdvar("sly_player_kick", "player")
 	game:setdvar("sly_player_move", "player")
-	game:setdvar("sly_player_model", "player model")
 	game:setdvar("sly_player_health", "health")
 	game:setdvar("sly_player_freeze", "player")
 	game:setdvar("sly_player_unfreeze", "player")
@@ -126,7 +128,7 @@ function dvarlistener(player)
 			actormove(player)
 		elseif game:getdvar("sly_actor_node") ~= "actor# #" then
 			actorsetnode(player)
-		elseif game:getdvar("sly_actor_weapon") ~= "actor# gun camo" then
+		elseif game:getdvar("sly_actor_weapon") ~= "actor# gun" then
 			actorsetweapon(player)
 		elseif game:getdvar("sly_cam_mode") ~= "linear/bezier/clear/save/load/path, speed" then
 			setcameramode(player)
@@ -152,8 +154,6 @@ function dvarlistener(player)
 			playerweapon(player)
 		elseif game:getdvar("sly_player_kick") ~= "player" then
 			playerkick(player)
-		elseif game:getdvar("sly_player_model") ~= "player model" then
-			playermodel(player)
 		elseif game:getdvar("sly_player_health") ~= "health" then
 			playerhealth(player)
 		elseif game:getdvar("sly_player_freeze") ~= "player" then
@@ -193,7 +193,7 @@ function callfunction(player)
 		giveAmmo(player)
 		player:switchtoweapon(getdvarargs[2])
 	elseif getdvarargs[1] == "dropweapon" then
-		player:iclientprintln("^7Weapon ^:dropped^7: " .. player:getcurrentweapon())
+		player:iprintln("^7Weapon ^:dropped^7: " .. player:getcurrentweapon())
 		local item = player:dropitem(player:getcurrentweapon())
 	elseif getdvarargs[1] == "icon" then
 		if testhud ~= nil then

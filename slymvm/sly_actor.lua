@@ -137,11 +137,10 @@ end
 function actorsetweapon(player)
 	-- Sets the actor's weapon on j_gun
 	local getdvarargs = splitStr(game:getdvar("sly_actor_weapon"))
-	game:setdvar("sly_actor_weapon", "actor# gun camo")
+	game:setdvar("sly_actor_weapon", "actor# gun")
 
 	local num = tonumber(getdvarargs[1])
 	if #getdvarargs == 2 then
-		-- no camo selected
 		if actor_weapon[num] ~= nil then
 			actor_weapon[num]:delete()
 		end
@@ -151,17 +150,6 @@ function actorsetweapon(player)
 		actor_weapon[num] = game:spawn("script_model", actor[num]:gettagorigin("j_gun"))
 		actor_weapon[num]:linkto(actor[num], "j_gun", vector:new(0.0, 0.0, 0.0), vector:new(0.0, 0.0, 0.0))
 		actor_weapon[num]:setmodel(getdvarargs[2])
-	elseif #getdvarargs == 3 then
-		-- camo selected
-		if actor_weapon[num] ~= nil then
-			actor_weapon[num]:delete()
-		end
-		if actor_weapon_attach[num] ~= nil then
-			actor_weapon_attach[num]:delete()
-		end
-		actor_weapon[num] = game:spawn("script_model", actor[num]:gettagorigin("j_gun"))
-		actor_weapon[num]:linkto(actor[num], "j_gun", vector:new(0.0, 0.0, 0.0), vector:new(0.0, 0.0, 0.0))
-		actor_weapon[num]:setmodel(game:getweaponmodel(getdvarargs[2]))
 	end
 end
 
