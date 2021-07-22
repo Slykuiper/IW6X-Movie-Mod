@@ -6,6 +6,9 @@ This is my IW6x Movie Making Mod. Free to download or use code snippets in your 
 
 All cinematics created with this mod are recorded live in-game with FRAPS or OBS.  
 
+# Video Tutorial
+For a video guide on how to use my mod, check out my [S1x Movie Making Mod Tutorial](https://www.youtube.com/watch?v=QNIUO-LwKZI&lc=UgyYdxLCI-GT_0tEswR4AaABAg). My IW6x functions the exact same besides some minor differences.
+
 ### Installation
 Download IW6x at https://xlabs.dev/iw6x_download.  
 Download [this mod](https://github.com/Slykuiper/IW6X-Movie-Mod/archive/refs/heads/main.zip) and put the **slymvm** folder in `\[rootfolder]\IW6x\scripts\`. Create the scripts folder if it's missing.
