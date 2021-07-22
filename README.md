@@ -92,8 +92,8 @@ sly_cam_rotate `degrees` | `sly_cam_rotate 45` | Rotates your z-axis by a specif
 ### Spawning Models & Effects
 Command | Usage | Description
 ------------ | ------------- | -------------  
-sly_forge_model `model` | `sly_forge_model defaultactor` | Spawns a model on your location. Use `listassetpool 7` with a key to find desired models. Most models need to be precached, do so in the **precache_models()** function in `sly_precache.lua` 
-sly_forge_fx `effect` | `sly_forge_fx blood2` | Spawns an effect in front of you. Use `listassetpool 42` with a key to find desired effects and define them in the **precache_fx()** function in `sly_precache.lua`
+sly_forge_model `model` | `sly_forge_model defaultactor` | Spawns a model on your location. Use `listassetpool 4` with a key to find desired models. Most models need to be precached, do so in the **precache_models()** function in `sly_precache.lua` 
+sly_forge_fx `effect` | `sly_forge_fx blood2` | Spawns an effect in front of you. Use `listassetpool 37` with a key to find desired effects and define them in the **precache_fx()** function in `sly_precache.lua`. Most effects don't work even when precached, I spent hours trying to find a working blood effect but only found one that works on only one map.
 
 ### Misc & Util Functions
 Random debug or useful functions I made. Changing these would be a great start to tinkering with modding.
@@ -101,7 +101,6 @@ Command | Usage | Description
 ------------ | ------------- | -------------  
 sly_function savepos | `sly_function savepos` | Saves your position.
 sly_function loadpos | `sly_function loadpos` | Loads your position to the saved location.
-sly_function cloak | `sly_function cloak` | Cloaks the player.
 sly_function camera | `sly_function camera` | Alternate bind instead of noclip
 sly_function timescale | `sly_function timescale` | Useful bind that toggles between timescale 1 and 0.1
 sly_timescale `number` | `sly_timescale timescale` | Set the timescale.
@@ -111,9 +110,19 @@ sly_function notify `key` | `sly_function notify beziercalc_finished` | Calls th
 sly_function unlink | `sly_function unlink` | Unlinks you from any linked entities. Great if you're stuck in a camera path.
 sly_function dropweapon | `sly_function dropweapon` | Drops your current weapon. Great for getting a weapon's pullout animation for clips. 
 sly_function icon `material` | `sly_function icon headicon_dead` | Creates a waypoint hud element at your feet with a desired material. 
-sly_function vision `vision_name` | `sly_function vision` | Sets the player's vision to a desired vision. Some visions: `default, black_bw, aftermath, end_game, near_death_mp`
-sly_function motorbike | `sly_function motorbike` | I was testing spawning functioning vehicles. This is super jank and only works on Urban. F to enter/exit, Sprint to drive
+sly_function vision `vision_name` | `sly_function vision` | Sets the player's vision to a desired vision. Some visions: `default, black_bw, aftermath, end_game, default_night_mp, near_death_mp, coup_sunblind`
 sly_function getplayerinfo `player_name` | `sly_function getplayerinfo RezTech` | Returns player info to your external console. Name, location, weapon, etc. Expands on this function to get more information.
 
 ### Actors
 It's pretty built out for the most part. Unfortunately the [scriptmodelplayanim()](https://github.com/XLabsProject/iw6x-client/issues/444) function isn't currently working so Actors are useless. Here are the commands anyway if it gets fixed again. 
+Command | Usage | Description
+------------ | ------------- | -------------  
+sly_actor_animation # animation | `sly_actor_animation 2 mp_stand_idle` | Calls an animation on an actor. Currently broken since the scriptmodelplayanim() function doesn't work. Animation must be precached.
+sly_actor_attach # model tag | `sly_actor_attach 2 weapon_k7 j_gun` | Spawns a model an a specified actor's tag. Model must be precached.
+sly_actor_create # | `sly_actor_create 1` | Creates an actor. 
+sly_actor_destroy # | `sly_actor_destroy 1` | Destroys an actor.
+sly_actor_fx # fx tag | `sly_actor_fx 1 betty tag_origin ` | Spawns an effect on the desired actor's tag.
+sly_actor_model # body head | `sly_actor_model 1 mp_body_infected_a head_mp_infected` | Changes the actor's model. Second argument (head) is optional. Models must be precached.
+sly_actor_move # speed | `sly_actor_move 1 2` | If nodes are set for the actor, this command will move them across the nodes at a set speed.
+sly_actor_node # number | `sly_actor_node 1 1 ` | Sets a node for the actor to travel to. Max 2 nodes.
+sly_actor_weapon # gun | `sly_actor_weapon 1 weapon_riot_shield_iw6 ` | Takes a weapon model, must be precached. Use `listassetpool 4 weapon_` to find worldmodels. Kinda broken
