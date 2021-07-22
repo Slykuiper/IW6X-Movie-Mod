@@ -1,17 +1,17 @@
-# S1x Movie Mod
-[![IMAGE ALT TEXT HERE](https://i.ytimg.com/vi/MSp49m0rm3g/maxresdefault.jpg)](https://www.youtube.com/watch?v=MSp49m0rm3g)
+# IW6x Movie Mod
+[![IMAGE ALT TEXT HERE](https://i.ytimg.com/vi/wlj6cDA3dEE/maxresdefault.jpg)](https://www.youtube.com/watch?v=wlj6cDA3dEE)
 
 
-This is my S1x Movie Making Mod. Free to download or use code snippets in your own mod, I encourage you to learn and get into coding to have more control over your cinematics (and modding is rewarding). Mod is provided as-is, support won't be provided if you DM or reach out for support. Check out the [IW6X Scripting Guide](https://github.com/XLabsProject/iw6x-client/wiki/Scripting) for a great overview of LUA scripting for IW6x and S1x. List of S1x functions outlined [here](https://github.com/XLabsProject/s1x-client/blob/master/src/client/game/scripting/function_tables.cpp)
+This is my IW6x Movie Making Mod. Free to download or use code snippets in your own mod, I encourage you to learn and get into coding to have more control over your cinematics (and modding is rewarding). Mod is provided as-is, support won't be provided if you DM or reach out for support. Check out the [IW6X Scripting Guide](https://github.com/XLabsProject/iw6x-client/wiki/Scripting) for a great overview of LUA scripting for IW6x and S1x. List of S1x functions outlined [here](https://github.com/XLabsProject/iw6x-client/blob/master/src/client/game/scripting/function_tables.cpp)
 
-There is no actual Theater Mode or demo system ([confirmed](https://youtu.be/iki-tcDYsi0?t=29)) in Advanced Warfare. All cinematics created with this mod are recorded live in-game with FRAPS or OBS.  
+All cinematics created with this mod are recorded live in-game with FRAPS or OBS.  
 
 ### Installation
-Download S1x at https://xlabs.dev/s1x_download.  
-Download [this mod](https://github.com/Slykuiper/S1X-Movie-Mod/archive/refs/heads/main.zip) and put the **slymvm** folder in `\[rootfolder]\S1x\scripts\`. Create the scripts folder if it's missing.
+Download IW6x at https://xlabs.dev/iw6x_download.  
+Download [this mod](https://github.com/Slykuiper/IW6X-Movie-Mod/archive/refs/heads/main.zip) and put the **slymvm** folder in `\[rootfolder]\IW6x\scripts\`. Create the scripts folder if it's missing.
 
 ### Reshade
-S1x is confirmed to work with [Reshade 4.9.1](https://reshade.me/downloads/ReShade_Setup_4.9.1.exe). It may not work with other versions. Create a shortcut and launch S1x that way if you want to use Reshade. Right click on s1x.exe and create a shortcut, add `-multiplayer` to the target and click Apply. Turn Post Processing Anti-Aliasing to Off in the Advanced Video Settings. **Reshade only works in private match**, any shaders using a depth pass (like Depth of Field) won't work on dedicated servers.
+IW6x is confirmed to work with [Reshade 4.9.1](https://reshade.me/downloads/ReShade_Setup_4.9.1.exe). It may not work with other versions. Create a shortcut and launch S1x that way if you want to use Reshade. Right click on s1x.exe and create a shortcut, add `-multiplayer` to the target and click Apply. Turn Post Processing Anti-Aliasing to Off in the Advanced Video Settings. **Reshade only works in private match**, any shaders using a depth pass (like Depth of Field) won't work on dedicated servers.
 
 # Commands
 This mod has a ton of commands, I'll try and highlight them all but feel free to look at the code to see how they're written in-case I leave out any parameters.
@@ -31,7 +31,7 @@ kick | `kick RezTech` | Kicks a bot or player from your match.
 give | `give iw5_morsloot9_mp` | Gives you a specified weapon.
 
 
-### S1x Movie Mod Commands
+### IW6x Movie Mod Commands
 By default player health is set to 50 to one-shot kill with snipers.
 You can edit the default player health by changing `player_health = 50` in `__init__.lua`  
 You can precache effects, models, animations, and materials by adding them in `sly_precache.lua`  
