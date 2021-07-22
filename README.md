@@ -2,7 +2,7 @@
 [![IMAGE ALT TEXT HERE](https://i.ytimg.com/vi/wlj6cDA3dEE/maxresdefault.jpg)](https://www.youtube.com/watch?v=wlj6cDA3dEE)
 
 
-This is my IW6x Movie Making Mod. Free to download or use code snippets in your own mod, I encourage you to learn and get into coding to have more control over your cinematics (and modding is rewarding). Mod is provided as-is, support won't be provided if you DM or reach out for support. Check out the [IW6X Scripting Guide](https://github.com/XLabsProject/iw6x-client/wiki/Scripting) for a great overview of LUA scripting for IW6x and S1x. List of S1x functions outlined [here](https://github.com/XLabsProject/iw6x-client/blob/master/src/client/game/scripting/function_tables.cpp)
+This is my IW6x Movie Making Mod. Free to download or use code snippets in your own mod, I encourage you to learn and get into coding to have more control over your cinematics (and modding is rewarding). Mod is provided as-is, support won't be provided if you DM or reach out for support. Check out the [IW6X Scripting Guide](https://github.com/XLabsProject/iw6x-client/wiki/Scripting) for a great overview of LUA scripting for IW6x and S1x. List of IW6x functions outlined [here](https://github.com/XLabsProject/iw6x-client/blob/master/src/client/game/scripting/function_tables.cpp)
 
 All cinematics created with this mod are recorded live in-game with FRAPS or OBS.  
 
@@ -11,7 +11,7 @@ Download IW6x at https://xlabs.dev/iw6x_download.
 Download [this mod](https://github.com/Slykuiper/IW6X-Movie-Mod/archive/refs/heads/main.zip) and put the **slymvm** folder in `\[rootfolder]\IW6x\scripts\`. Create the scripts folder if it's missing.
 
 ### Reshade
-IW6x is confirmed to work with [Reshade 4.9.1](https://reshade.me/downloads/ReShade_Setup_4.9.1.exe). It may not work with other versions. Create a shortcut and launch S1x that way if you want to use Reshade. Right click on s1x.exe and create a shortcut, add `-multiplayer` to the target and click Apply. Turn Post Processing Anti-Aliasing to Off in the Advanced Video Settings. **Reshade only works in private match**, any shaders using a depth pass (like Depth of Field) won't work on dedicated servers.
+IW6x is confirmed to work with [Reshade 4.9.1](https://reshade.me/downloads/ReShade_Setup_4.9.1.exe). It may not work with other versions. Create a shortcut and launch IW6x that way if you want to use Reshade. Right click on iw6x.exe and create a shortcut, add `-multiplayer` to the target and click Apply. Turn Post Processing Anti-Aliasing to Off in the Advanced Video Settings. **Reshade only works in private match**, any shaders using a depth pass (like Depth of Field) won't work on dedicated servers.
 
 # Commands
 This mod has a ton of commands, I'll try and highlight them all but feel free to look at the code to see how they're written in-case I leave out any parameters.
@@ -116,22 +116,4 @@ sly_function motorbike | `sly_function motorbike` | I was testing spawning funct
 sly_function getplayerinfo `player_name` | `sly_function getplayerinfo RezTech` | Returns player info to your external console. Name, location, weapon, etc. Expands on this function to get more information.
 
 ### Actors
-I tried pretty hard to make "actors" a thing, but the way costumes work make it a bit complicated. I've given up from developing further but left the code in for people to tinker with. I'll share my research below. It would be great to have more modding support with LUA, the ability to call threads defined the GSC code from LUA would go a long way to  creating more advanced mods. Anyway, here's why Actors are a pain in the ass.
-
-In older titles, a player consists of a head and a body model. Because this game had a huge focus on customization with the Customization Menu, there are hundreds of models a player can choose to build a player's "costume". A Costume can consist of 9 different models:
-
-* Head
-* Hat
-* Eyewear
-* Gloves
-* Gear
-* Pants
-* Kneepads
-* Shoes
-* Exo
-
-I made a system to spawn and attach all of these body parts to an actor (mainly the **actorcreate()** function in `sly_actor.lua`) but one issue I ran into is properly attaching each model on the correct bone. I'm not sure which model to use as the base and attach the rest of the parts to but you can call `sly_actor_create 1` and see the result. Close but not quite compared to Advaned Warfare's "agent" system.
-
-[![actor-agent comparison](https://raw.githubusercontent.com/Slykuiper/S1X-Movie-Mod/main/agent-actor.jpg)]()
-
-I feel like I've tried every combination of bone and model to get the animations aligned properly but still no luck. The gloves, shoes, and gear aren't linked to the proper model on the proper bone. I've exported these models with Greyhound to get their full list of bones and none of those seemed to work (I could have just missed something).
+It's pretty built out for the most part. Unfortunately the [scriptmodelplayanim()](https://github.com/XLabsProject/iw6x-client/issues/444) function isn't currently working so Actors are useless. Here are the commands anyway if it gets fixed again. 
