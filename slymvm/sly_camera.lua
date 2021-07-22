@@ -178,7 +178,7 @@ function initcameraflightlinear(player, speed)
 	camera_null.angles = camera_node[1].angles
 	camera_null:enablelinkto()
 	player:setorigin(camera_node[1].origin)
-	player.angles = camera_node[1].angles
+	player:setplayerangles(camera_node[1].angles)
 	player:playerlinkto(camera_null, "tag_origin", 1, 360, 360, 360, 360, false )
 	player:freezecontrols(true)
 
@@ -219,7 +219,7 @@ function initcameraflightbezier(player, speed)
 	camera_null.angles = camera_node[1].angles
 	camera_null:enablelinkto()
 	player:setorigin(camera_node[1].origin)
-	player.angles = camera_node[1].angles
+	player:setplayerangles(camera_node[1].angles)
 	player:playerlinkto(camera_null, "tag_origin", 1, 360, 360, 360, 360, false )
 	player:freezecontrols(true)
 
@@ -308,7 +308,7 @@ function unlinkplayer(player)
 	player:unlink()
 	player:freezecontrols(false)
 	player:setorigin(savedorigin2)
-	player.angles = savedangles2
+	player:setplayerangles(savedangles2)
 	revealnodes(true)
 	camera_flight = false
 end
