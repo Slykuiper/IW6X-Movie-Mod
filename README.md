@@ -25,7 +25,7 @@ Use Shift + tilde to view the extended in-game console.
 
 Command | Usage | Description
 ------------ | ------------- | -------------  
-listassetpool | `listassetpool 40 mors` |  Lists loaded in-game assets, can be filtered with keys. `listassetpool 40 mors` would return all of the MORS sniper rifle variants.
+listassetpool | `listassetpool 35 iw6_` |  Lists loaded in-game assets, can be filtered with keys. `listassetpool 35 iw6_` would return all of the standard nase weapon names.
 fast_restart | `fast_restart` | Restarts the game instantly.
 god | `god` | Gives you unlimited health.
 noclip | `noclip` | Allows you to move freely through objects.
