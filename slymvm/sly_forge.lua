@@ -5,7 +5,7 @@ function spawnforgeeffect(player)
 
 	if #getdvarargs == 1 then
 		local forward = player:gettagorigin("j_head")
-		local endpos = vector_scal(game:anglestoforward(player.angles), 100)
+		local endpos = vector_scal(game:anglestoforward(player:getplayerangles()), 100)
 		local endpos2 = vector:new(endpos.x + forward.x, endpos.y + forward.y, endpos.z + forward.z)
 		local fx = game:spawnfx(forge_fx[getdvarargs[1]], endpos2)
 		game:triggerfx(fx)
@@ -25,7 +25,7 @@ function spawnforgemodel(player)
 	if forge_num == 0 then
 		forge_model[forge_num] = game:spawn("script_model", player.origin)
 		forge_model[forge_num].origin = player.origin
-		forge_model[forge_num].angles = player.angles
+		forge_model[forge_num].angles = player:getplayerangles()
 		forge_model[forge_num]:setmodel(getdvarargs[1])
 		local fx = game:spawnfx(forge_fx["3dping"], forge_model[forge_num].origin)
 		game:triggerfx(fx)
@@ -34,7 +34,7 @@ function spawnforgemodel(player)
 		forge_num = forge_num + 1
 		forge_model[forge_num] = game:spawn("script_model", player.origin)
 		forge_model[forge_num].origin = player.origin
-		forge_model[forge_num].angles = player.angles
+		forge_model[forge_num].angles = player:getplayerangles()
 		forge_model[forge_num]:setmodel(getdvarargs[1])
 		local fx = game:spawnfx(forge_fx["3dping"], forge_model[forge_num].origin)
 		game:triggerfx(fx)

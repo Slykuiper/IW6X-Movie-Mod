@@ -207,7 +207,7 @@ end
 function savePosition(player)
 	-- Saves player's position
 	savedorigin = player.origin
-    savedangles = player.angles
+    savedangles = player:getplayerangles()
 	player:iprintln("Position ^:saved.")
 end
 
@@ -215,7 +215,7 @@ function loadPosition(player)
 	-- Loads player's position
 	if savedorigin ~= nil then
 		player:setorigin(savedorigin)
-		player.angles = savedangles
+		player:setplayerangles(savedangles)
 		player:iprintln("Position ^:loaded.")
 	end
 end

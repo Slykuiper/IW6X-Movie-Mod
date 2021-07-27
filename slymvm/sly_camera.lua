@@ -54,12 +54,12 @@ function setcameramode(player)
 		f:close()
 	elseif cameramode == "load" then
 		local forward = player:gettagorigin("j_head")
-		local endpos = vector_scal(game:anglestoforward(player.angles), 200)
+		local endpos = vector_scal(game:anglestoforward(player:getplayerangles()), 200)
 		local org = vector:new(endpos.x + forward.x, endpos.y + forward.y, endpos.z + forward.z)
 		local fx = game:spawnfx(forge_fx["cash"], org)
 		game:triggerfx(fx)
 		--local org = player.origin
-		local ang = player.angles
+		local ang = player:getplayerangles()
 		local camerapath = ("iw6x\\scripts\\slymvm\\campaths\\%s.json"):format(getdvarargs[2])
 		local f = io.open(camerapath, "r")
 		if f == nil then
@@ -128,7 +128,7 @@ function setcameranode(player)
 			-- create camera node
 			camera_node[nodenum] = game:spawn("script_model", player.origin)
 			camera_node[nodenum].origin = player.origin
-			camera_node[nodenum].angles = player.angles
+			camera_node[nodenum].angles = player:getplayerangles()
 			camera_node[nodenum]:setmodel("tag_origin")
 			-- create camera node icon
 			camera_node_icon[nodenum] = game:newhudelem()
@@ -160,7 +160,7 @@ function setcamerarotation(player)
 	game:setdvar("sly_cam_rotate", "#")
 
 	-- rotate z axis
-	local playerangles = player.angles
+	local playerangles = player:getplayerangles()
 	player:setplayerangles(vector:new( playerangles.x,  playerangles.y, tonumber(getdvarargs[1])))
 end
 
@@ -173,7 +173,7 @@ function initcameraflightlinear(player, speed)
 	local speedms = math.floor(speed / 0.001)
 
 	savedorigin2 = player.origin
-    savedangles2 = player.angles
+    savedangles2 = player:getplayerangles()
 	camera_null.origin = camera_node[1].origin
 	camera_null.angles = camera_node[1].angles
 	camera_null:enablelinkto()
@@ -214,7 +214,7 @@ function initcameraflightbezier(player, speed)
 	
 	-- prepare bezier camera
 	savedorigin2 = player.origin
-    savedangles2 = player.angles
+    savedangles2 = player:getplayerangles()
 	camera_null.origin = camera_node[1].origin
 	camera_null.angles = camera_node[1].angles
 	camera_null:enablelinkto()

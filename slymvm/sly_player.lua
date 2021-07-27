@@ -105,7 +105,7 @@ function playermove(player)
 				player_spawn[player.name].origin = vector:new(org.x + math.floor(math.random (-50, 50)), org.y + math.floor(math.random (-50, 50)), org.z)
 				player_spawn[player.name].angles = ang
 				player:setorigin(player_spawn[player.name].origin)
-				player.angles = player_spawn[player.name].angles
+				player:setplayerangles(player_spawn[player.name].angles)
 				player:freezecontrols(true)
 			end
 		end
@@ -116,7 +116,7 @@ function playermove(player)
 				player_spawn[player.name].origin = org
 				player_spawn[player.name].angles = ang
 				player:setorigin(player_spawn[getdvarargs].origin)
-				player.angles = player_spawn[getdvarargs].angles
+				player:setplayerangles(player_spawn[getdvarargs].angles)
 				player:freezecontrols(true)
 			end
 		end
