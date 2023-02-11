@@ -1,6 +1,7 @@
 # IW6x Movie Mod
 [![IMAGE ALT TEXT HERE](https://i.ytimg.com/vi/wlj6cDA3dEE/maxresdefault.jpg)](https://www.youtube.com/watch?v=wlj6cDA3dEE)
 
+First off - HUGE thank-you to bradstv for updating this projects with support for newer versions. Support him: https://twitter.com/BradLikesTweets
 
 This is my IW6x Movie Making Mod. Free to download or use code snippets in your own mod, I encourage you to learn and get into coding to have more control over your cinematics (and modding is rewarding). Mod is provided as-is, support won't be provided if you DM or reach out for support. Check out the [IW6X Scripting Guide](https://github.com/XLabsProject/iw6x-client/wiki/Scripting) for a great overview of LUA scripting for IW6x and S1x. List of IW6x functions outlined [here](https://github.com/XLabsProject/iw6x-client/blob/master/src/client/game/scripting/function_tables.cpp)
 
